@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔄 Invertidor de Texto Mágico</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: #e0e5ec;
+            border-radius: 30px;
+            padding: 50px 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 
+                20px 20px 60px #bebebe,
+                -20px -20px 60px #ffffff;
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .description {
+            color: #5a5a5a;
+            text-align: center;
+            font-size: 1rem;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .input-group {
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 18px 20px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 15px;
+            background: #e0e5ec;
+            color: #333;
+            font-family: 'Poppins', sans-serif;
+            box-shadow: 
+                inset 8px 8px 16px #bebebe,
+                inset -8px -8px 16px #ffffff;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            box-shadow: 
+                inset 6px 6px 12px #bebebe,
+                inset -6px -6px 12px #ffffff;
+        }
+
+        .char-counter {
+            position: absolute;
+            right: 15px;
+            bottom: -25px;
+            font-size: 0.85rem;
+            color: #888;
+            font-weight: 500;
+        }
+
+        .char-counter.warning {
+            color: #ff6b6b;
+        }
+
+        button {
+            width: 100%;
+            padding: 18px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 15px;
+            background: #e0e5ec;
+            color: #667eea;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            box-shadow: 
+                8px 8px 16px #bebebe,
+                -8px -8px 16px #ffffff;
+            transition: all 0.3s ease;
+            margin-top: 30px;
+            display: none;
+        }
+
+        button.visible {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                10px 10px 20px #bebebe,
+                -10px -10px 20px #ffffff;
+        }
+
+        button:active {
+            transform: translateY(0);
+            box-shadow: 
+                inset 4px 4px 8px #bebebe,
+                inset -4px -4px 8px #ffffff;
+        }
+
+        .result-section {
+            margin-top: 40px;
+            display: none;
+        }
+
+        .result-section.visible {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .result-label {
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+        }
+
+        .result-box {
+            background: #e0e5ec;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 
+                inset 8px 8px 16px #bebebe,
+                inset -8px -8px 16px #ffffff;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .result-text {
+            color: #333;
+            font-size: 1.2rem;
+            font-weight: 500;
+            word-break: break-word;
+            flex: 1;
+        }
+
+        .copy-btn {
+            padding: 10px 20px;
+            font-size: 0.9rem;
+            border-radius: 10px;
+            background: #e0e5ec;
+            color: #667eea;
+            border: none;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            box-shadow: 
+                5px 5px 10px #bebebe,
+                -5px -5px 10px #ffffff;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            width: auto;
+            margin: 0;
+            display: block;
+        }
+
+        .copy-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .copy-btn:active {
+            box-shadow: 
+                inset 3px 3px 6px #bebebe,
+                inset -3px -3px 6px #ffffff;
+        }
+
+        .copy-btn.copied {
+            color: #51cf66;
+        }
+
+        .history-section {
+            margin-top: 40px;
+            display: none;
+        }
+
+        .history-section.visible {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .history-title {
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+        }
+
+        .history-list {
+            background: #e0e5ec;
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 
+                inset 8px 8px 16px #bebebe,
+                inset -8px -8px 16px #ffffff;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .history-item {
+            padding: 10px;
+            margin-bottom: 8px;
+            background: #e0e5ec;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            color: #555;
+            box-shadow: 
+                3px 3px 6px #bebebe,
+                -3px -3px 6px #ffffff;
+        }
+
+        .history-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .history-arrow {
+            color: #667eea;
+            margin: 0 8px;
+            font-weight: 600;
+        }
+
+        .realtime-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #51cf66 0%, #37b24d 100%);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 10px;
+            box-shadow: 0 4px 8px rgba(81, 207, 102, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 40px 25px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .description {
+                font-size: 0.9rem;
+            }
+
+            input[type="text"] {
+                font-size: 1rem;
+                padding: 15px;
+            }
+
+            button {
+                font-size: 1rem;
+                padding: 15px;
+            }
+
+            .result-text {
+                font-size: 1rem;
+            }
+
+            .result-box {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .copy-btn {
+                width: 100%;
+            }
+
+            .realtime-badge {
+                display: block;
+                margin: 10px auto 0;
+                text-align: center;
+                width: fit-content;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.7rem;
+            }
+
+            .container {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>
+            🔄 Invertidor de Texto Mágico
+            <span class="realtime-badge">⚡ TIEMPO REAL</span>
+        </h1>
+        <p class="description">
+            ¿Alguna vez quisiste leer al revés sin hacer el pino? 🤸‍♂️<br>
+            ¡Escribe algo y observa la magia de la inversión instantánea!
+        </p>
+
+        <div class="input-group">
+            <label for="textInput">Escribe tu texto aquí:</label>
+            <div class="input-wrapper">
+                <input 
+                    type="text" 
+                    id="textInput" 
+                    placeholder="Ej: AI4Devs" 
+                    maxlength="90"
+                    autocomplete="off"
+                >
+                <span class="char-counter" id="charCounter">0/90</span>
+            </div>
+        </div>
+
+        <button id="reverseBtn">✨ Invertir Texto (Demo)</button>
+
+        <div class="result-section" id="resultSection">
+            <div class="result-label">✅ Texto invertido:</div>
+            <div class="result-box">
+                <div class="result-text" id="resultText"></div>
+                <button class="copy-btn" id="copyBtn">📋 Copiar</button>
+            </div>
+        </div>
+
+        <div class="history-section" id="historySection">
+            <div class="history-title">📜 Historial de inversiones:</div>
+            <div class="history-list" id="historyList"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
